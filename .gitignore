@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+.DS_Store
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# Keep recordings and generated transcripts out of source control.
+/data/*
+!/data/.gitkeep
+/outputs/*
+!/outputs/.gitkeep
+
+# Model weights belong in local caches or artifact storage.
+*.pt
+*.pth
+*.onnx
