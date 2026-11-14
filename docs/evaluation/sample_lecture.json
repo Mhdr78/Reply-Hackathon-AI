@@ -1,0 +1,41 @@
+[
+  {
+    "id": "matrix-bias-en",
+    "lecture_id": "lecture_001",
+    "question": "Why does the first weight matrix have I+1 columns instead of I columns?",
+    "selection": {"start_s": 331.6, "end_s": 366.6},
+    "expected_sources": [{"source_type": "transcript", "start_s": 331.6, "end_s": 461.4}],
+    "expected_answerable": true
+  },
+  {
+    "id": "matrix-bias-it",
+    "lecture_id": "lecture_001",
+    "question": "Perché la matrice dei pesi del primo livello ha I+1 colonne invece di I?",
+    "response_language": "it",
+    "selection": {"start_s": 331.6, "end_s": 366.6},
+    "expected_sources": [{"source_type": "transcript", "start_s": 331.6, "end_s": 461.4}],
+    "expected_answerable": true
+  },
+  {
+    "id": "activation-slides-en",
+    "lecture_id": "lecture_001",
+    "question": "Which activation functions and their derivatives are listed on the slides?",
+    "expected_sources": [{"source_type": "pdf", "page_number": 18}],
+    "expected_answerable": true
+  },
+  {
+    "id": "network-layers-it",
+    "lecture_id": "lecture_001",
+    "question": "Quali livelli compongono una rete neurale feedforward e come sono collegati?",
+    "response_language": "it",
+    "expected_sources": [{"source_type": "pdf", "page_number": 17}],
+    "expected_answerable": true
+  },
+  {
+    "id": "outside-material",
+    "lecture_id": "lecture_001",
+    "question": "What does this lecture teach about photosynthesis in plant leaves?",
+    "expected_sources": [],
+    "expected_answerable": false
+  }
+]

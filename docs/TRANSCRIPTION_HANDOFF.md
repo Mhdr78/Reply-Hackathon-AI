@@ -1,5 +1,9 @@
 # Transcription module: implementation and integration handoff
 
+Question-driven retrieval and tutor answers are provided by the independent
+`lecture_rag` module. See [RAG_INTEGRATION.md](RAG_INTEGRATION.md) to connect the
+teammate's prototype without duplicating its files or full-context answer path.
+
 For full-lecture translated transcript tracks, see the separate
 [OpenRouter translation contract](TRANSLATION.md). Original Whisper word
 timestamps remain source-language data and must not be copied onto target words.

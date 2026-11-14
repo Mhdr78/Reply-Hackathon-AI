@@ -4,15 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reply-lecture-transcription"
-version = "0.2.0"
-description = "Timestamped lecture transcription and aligned English/Italian transcript translation"
+version = "0.3.0"
+description = "Lecture transcription, aligned translation, and hybrid source-grounded RAG"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["openai-whisper==20250625", "python-dotenv>=1.1,<2"]
 
+[project.optional-dependencies]
+rag = ["qdrant-client>=1.16,<2", "fastapi>=0.115,<1", "uvicorn>=0.30,<1", "pypdf>=5,<7", "numpy>=2.1,<2.5", "fastembed>=0.9,<1"]
+test = ["httpx>=0.27,<1"]
+
 [project.scripts]
 lecture-transcribe = "lecture_transcription.cli:main"
 lecture-translate = "lecture_translation.cli:main"
+lecture-rag = "lecture_rag.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -20,3 +20,7 @@ dist/
 *.pt
 *.pth
 *.onnx
+
+# Local RAG catalog, vector database and development caches.
+/.local/
+/qdrant_storage/

@@ -1,5 +1,9 @@
 # English/Italian teaching and token-efficiency decision
 
+The retrieval and grounded-answer path is implemented separately in
+`lecture_rag`; see [RAG.md](RAG.md) and the [integration contract](RAG_INTEGRATION.md).
+This document explains the language/cost decisions behind that path.
+
 The separate requirement to display a full translated transcript is now handled
 by the OpenRouter translation module described in [TRANSLATION.md](TRANSLATION.md).
 The recommendation below concerns tutor answers. A complete translated asset
@@ -13,9 +17,9 @@ ask the tutoring LLM to generate its explanation **directly in the user's chosen
 response language**, English or Italian, in the same answer call.
 
 This is an architecture recommendation for the downstream team. The present
-transcription package does not implement a tutoring LLM, an embeddings index, or
-a user interface. The separate translation module creates and reuses full
-translated transcript artifacts; see its own contract.
+transcription package itself does not implement a tutoring LLM or embeddings.
+Those are supplied by `lecture_rag`; the user interface remains separate. The
+translation module creates and reuses full translated transcript artifacts.
 
 For the prototype, do not translate an entire lecture or slide deck merely to
 change the language of an explanation. A bilingual teacher can read English

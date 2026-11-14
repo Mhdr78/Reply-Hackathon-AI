@@ -1,5 +1,37 @@
 # Reply-Hackathon-AI
 
+## Question-driven RAG
+
+The separate `lecture_rag` module indexes original transcript JSON and PDF page
+text, performs Qdrant semantic + BM25 lexical retrieval, reranks candidates, and
+returns English/Italian answers with validated source identifiers and original
+timestamps/PDF pages. It does not import or add the teammate's prototype files.
+
+```bash
+python -m venv --system-site-packages .venv
+source .venv/bin/activate
+python -m pip install -e '.[rag,test]'
+python rag.py index --transcript outputs/lecture_001/transcript.json --pdf data/slides.pdf
+python rag.py serve --port 8010
+```
+
+Replace the PDF path with an existing asset; transcript-only indexing is also
+supported. Local persistent Qdrant works without a running Docker daemon. Data
+and caches live under `.local/rag/`, excluded from Git. A shared Qdrant server
+can be selected later through `.env` configuration.
+
+The separately added `polimi-lectures/` UI/server is unchanged. Its chat route
+still needs to call this module; see the integration guide and data adapters.
+
+The existing OpenRouter key is reused for reranking and answers with
+`openai/gpt-6-luna`. Embeddings run locally with multilingual MiniLM through
+FastEmbed; the first run downloads public weights, then inference stays local.
+Local RAG limits default to $1 cumulative and $0.03 estimated per
+request; this does not replace the team's OpenRouter account spending limit.
+
+- [RAG setup, budget and evaluation](docs/RAG.md)
+- [Stable API/Python contract for teammate integration](docs/RAG_INTEGRATION.md)
+
 Lecture transcription component for the team's multimodal RAG system.
 It produces original-language text and approximate segment/word timestamps
 for the downstream slide alignment, segmentation, retrieval, and tutor agents.
@@ -23,6 +55,7 @@ Reply-Hackathon-AI/
 │   ├── core.py              # Language detection and transcription
 │   └── cli.py               # CLI arguments and output files
 ├── src/lecture_translation/ # Full-context OpenRouter translation and source-time mapping
+├── src/lecture_rag/         # Indexing, hybrid retrieval, reranking, grounded QA and HTTP API
 ├── tests/
 │   ├── test_language_detection.py
 │   └── test_cli.py
@@ -35,6 +68,7 @@ Reply-Hackathon-AI/
 ├── outputs/                 # Generated files; ignored except .gitkeep
 ├── transcribe.py            # Keeps the original command/import working
 ├── translate.py             # Translate an existing transcript without rerunning Whisper
+├── rag.py                   # Index/search/ask/serve/evaluate commands
 ├── pyproject.toml           # Package metadata, dependency pin, console command
 ├── requirements.txt         # Installs this package in editable mode
 └── .gitignore
@@ -172,6 +206,7 @@ python -m unittest discover -s tests -v
 The detector tests use simulated probabilities. English audio has also been
 processed with word timestamps; real Italian lecture accuracy remains to be
 evaluated. Whisper segments are transcription units, not final lesson topics.
-The tutoring LLM, multilingual embeddings, slide processing, and user interface
-are downstream work. The separate transcript translation CLI is implemented;
-live model translation quality still requires an API-backed evaluation.
+The separate RAG package now supplies multilingual embeddings, retrieval and
+source-grounded tutor answers. Visual slide interpretation, OCR and frontend
+wiring remain separate integration work. See the RAG contract above before
+connecting the teammate's UI or prototype.
