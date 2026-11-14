@@ -37,5 +37,5 @@ local RAG accounting, not the account's remaining wallet balance.
 Full local results and source metadata are saved in the ignored
 `.local/rag/evaluation_sample.json`. To repeat the same checks, see
 `docs/evaluation/sample_lecture.json` and the evaluation commands in `RAG.md`.
-The current UI/server continues to use its existing answer path until the
-integration described in `RAG_INTEGRATION.md` is wired.
+The UI integration has since been completed; see `APP_INTEGRATION.md` for the
+subsequent integrated route tests, browser smoke test and remaining boundaries.

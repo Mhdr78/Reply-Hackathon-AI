@@ -20,8 +20,9 @@ supported. Local persistent Qdrant works without a running Docker daemon. Data
 and caches live under `.local/rag/`, excluded from Git. A shared Qdrant server
 can be selected later through `.env` configuration.
 
-The separately added `polimi-lectures/` UI/server is unchanged. Its chat route
-still needs to call this module; see the integration guide and data adapters.
+The `polimi-lectures/` UI now uses the unified app API for RAG chat, translation,
+Whisper jobs, chapters and media. Start `.venv/bin/python run.py` from the root
+and `npm run web` inside `polimi-lectures`. See [manual app test](docs/APP_INTEGRATION.md).
 
 The existing OpenRouter key is reused for reranking and answers with
 `openai/gpt-6-luna`. Embeddings run locally with multilingual MiniLM through

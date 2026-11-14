@@ -13,7 +13,7 @@ interface Props {
   /** Seek within the current lecture. */
   onSeek: (t: number) => void;
   /** Open the lecture's slides at a page (from [PDF p. N] citations). */
-  onOpenPdf: (page: number) => void;
+  onOpenPdf: (page: number, documentId?: string) => void;
   /** The segment currently selected on the timeline or in the transcript; attached to the next question. */
   selection: TimeSelection | null;
   onClearSelection: () => void;
@@ -28,6 +28,7 @@ const rangeLabel = (s: { start: number; end: number }) => `${formatTimestamp(s.s
 
 export function ChatPanel({ lecture, onClose, onSeek, onOpenPdf, selection, onClearSelection, askSignal }: Props) {
   const svc = services.chat;
+  const [responseLanguage, setResponseLanguage] = useState<'en' | 'it'>('en');
   const [status, setStatus] = useState<ChatLectureStatus>();
   const [chats, setChats] = useState<ChatThread[]>();
   const [loadError, setLoadError] = useState<AppError>();
@@ -104,7 +105,7 @@ export function ChatPanel({ lecture, onClose, onSeek, onOpenPdf, selection, onCl
         const chat = await svc.createChat(lecture.id);
         created = id = chat.id;
       }
-      const r = await svc.sendMessage(id, { content, selection: sel });
+      const r = await svc.sendMessage(id, { content, selection: sel, response_language: responseLanguage });
       if (created) { setLoadedFor(id); setView({ kind: 'chat', chatId: id }); }
       setMessages((m) => [...m, r.user, r.assistant]);
       upsertChat(r.chat);
@@ -155,7 +156,7 @@ export function ChatPanel({ lecture, onClose, onSeek, onOpenPdf, selection, onCl
             <div className="text-[13.5px] font-semibold">{view.kind === 'list' ? 'Your chats' : 'New chat'}</div>
           )}
           <div className="truncate text-[11px] text-slate-500">
-            {svc.kind === 'mock' ? 'Lecture assistant · mock responses' : 'Lecture assistant · transcript + slides'}
+            {svc.kind === 'mock' ? 'Lecture assistant · mock responses' : 'Lecture assistant · RAG · transcript + PDFs'}
           </div>
         </div>
         {view.kind === 'chat' && current && <DeleteButton onConfirm={() => remove(current.id)} />}
@@ -203,7 +204,7 @@ export function ChatPanel({ lecture, onClose, onSeek, onOpenPdf, selection, onCl
           {pending && (
             <div className="flex items-center gap-2 px-1 py-1 text-[12px] text-slate-500" aria-label="Assistant is thinking">
               {[0, 150, 300].map((d) => <span key={d} className="size-1.5 animate-bounce rounded-full bg-slate-400" style={{ animationDelay: `${d}ms` }} />)}
-              {svc.kind === 'server' && <span className="ml-1">Reading the transcript and slides…</span>}
+              {svc.kind === 'server' && <span className="ml-1">Finding relevant lecture passages and slides…</span>}
             </div>
           )}
           {failed && (
@@ -228,6 +229,7 @@ export function ChatPanel({ lecture, onClose, onSeek, onOpenPdf, selection, onCl
       {/* Composer */}
       {view.kind === 'chat' && (
         <form onSubmit={(e: FormEvent) => { e.preventDefault(); void send(input); }} className="shrink-0 border-t border-slate-100 p-3">
+          <label className="mb-2 flex items-center gap-2 text-xs text-slate-600">Answer language <select aria-label="Answer language" disabled={!!pending} value={responseLanguage} onChange={(e) => setResponseLanguage(e.target.value as 'en' | 'it')} className="rounded border border-slate-200 px-2 py-1"><option value="en">English</option><option value="it">Italiano</option></select></label>
           <div className={cn('rounded-xl border border-slate-200 bg-white shadow-sm focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100', !canAsk && 'opacity-60')}>
             {selection && (
               <div className="flex items-start gap-2 border-b border-slate-100 px-2.5 py-2">
@@ -338,7 +340,7 @@ function ChatRow({ chat, onOpen, onDelete }: { chat: ChatThread; onOpen: (id: st
   );
 }
 
-function Bubble({ msg, onSeek, onOpenPdf }: { msg: ChatMessage; onSeek: (t: number) => void; onOpenPdf: (p: number) => void }) {
+function Bubble({ msg, onSeek, onOpenPdf }: { msg: ChatMessage; onSeek: (t: number) => void; onOpenPdf: (p: number, documentId?: string) => void }) {
   if (msg.role === 'user') {
     return (
       <div className="ml-8 animate-fade-in">

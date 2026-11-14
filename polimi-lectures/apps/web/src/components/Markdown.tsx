@@ -11,7 +11,7 @@ import { formatTimestamp } from '@/lib/format';
  */
 export interface CitationHandlers {
   onSeek?: (seconds: number) => void;
-  onOpenPdf?: (page: number) => void;
+  onOpenPdf?: (page: number, documentId?: string) => void;
 }
 
 const TS = String.raw`\d{1,2}:\d{2}(?::\d{2})?`;
@@ -26,6 +26,7 @@ const INLINE = new RegExp(
     String.raw`(?<![\w*])\*([^*\n]+)\*(?!\*)|(?<!\w)_([^_\n]+)_(?!\w)`, // 9,10 italic
     String.raw`\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)`, // 11,12 link
     String.raw`\$([^$\n]+)\$`, // 13 inline math
+    String.raw`\[PDF\s+(document_\d+)\s+p\.\s*(\d+)\]`, // 14,15 identified PDF
   ].join('|'),
   'g',
 );
@@ -51,6 +52,7 @@ function inline(text: string, h: CitationHandlers, keyBase: string): ReactNode[]
     } else if (m[8]) out.push(<strong key={key} className="font-semibold text-ink">{inline(m[8], h, key)}</strong>);
     else if (m[9] || m[10]) out.push(<em key={key}>{inline(m[9] ?? m[10], h, key)}</em>);
     else if (m[11]) out.push(<a key={key} href={m[12]} target="_blank" rel="noreferrer noopener" className="font-medium text-brand-600 underline underline-offset-2">{m[11]}</a>);
+    else if (m[14]) out.push(<PdfChip key={key} page={Number(m[15])} onOpen={(page) => h.onOpenPdf?.(page, m[14])} />);
     else if (m[13]) out.push(<span key={key} className="rounded bg-slate-50 px-1 font-mono text-[12.5px] italic">{m[13]}</span>);
   }
   if (last < text.length) out.push(text.slice(last));

@@ -152,6 +152,7 @@ export interface ChatLectureStatus {
 }
 
 export interface SendMessageRequest {
+  response_language?: 'en' | 'it';
   content: string;
   selection?: { start: number; end: number };
 }

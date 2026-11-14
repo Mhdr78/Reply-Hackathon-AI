@@ -14,7 +14,9 @@ export default defineConfig(({ mode }) => {
     resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
     test: { environment: 'node', include: ['src/**/*.test.ts'] },
     server: {
+      host: '127.0.0.1', port: 5173, strictPort: true,
       proxy: {
+        '/media': { target: chatbotServer, changeOrigin: true },
         // Browser → /chatbot-api/api/... → the chatbot server (services/chatbot). Keeps the OpenRouter key on the server and avoids CORS.
         '/chatbot-api': { target: chatbotServer, changeOrigin: true, rewrite: (p) => p.replace(/^\/chatbot-api/, '') },
       },

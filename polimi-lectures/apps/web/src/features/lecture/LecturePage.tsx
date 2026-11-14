@@ -11,6 +11,7 @@ import { ErrorState, Skeleton, StatusBadge } from '@/components/ui';
 import { ChatPanel } from '@/features/chat/ChatPanel';
 import type { Lecture, TimeSelection, Transcript } from '@/types/domain';
 import { PlaybackProvider, usePlaybackStore } from './playback';
+import { SourceTools } from './SourceTools';
 import { VideoPlayer } from './VideoPlayer';
 import { TranscriptViewer, type TranscriptPanelView } from './TranscriptViewer';
 import { TranscriptionStatusPanel } from './TranscriptionStatusPanel';
@@ -37,17 +38,20 @@ function LectureView({ lecture }: { lecture: Lecture }) {
   const siblings = useAsync(() => services.courses.listLectures(lecture.courseId), [lecture.courseId]);
   const { job, transcript: remoteTranscript, error, retry } = useTranscription(lecture.id);
   const local = useLocalFiles(lecture.id);
-  const transcript = local.transcript ?? remoteTranscript;
+  const [translated, setTranslated] = useState<Transcript>();
+  const originalTranscript = local.transcript ?? remoteTranscript;
+  const transcript = translated ?? originalTranscript;
   const videoSrc = local.video?.url ?? lecture.videoUrl;
-  const chapters = useChapters(transcript);
+  const chapters = useChapters(local.transcript || local.video ? undefined : remoteTranscript);
   const [panelView, setPanelView] = useState<TranscriptPanelView>('transcript');
   const panelRef = useRef<HTMLDivElement>(null);
   const materials = useAsync(() => services.materials.listMaterials(lecture.id), [lecture.id]);
   const [pdf, setPdf] = useState<OpenPdf | null>(null);
   // [PDF p. N] citations from the assistant open the slides (or the first PDF) at that page.
-  const openPdfPage = (page: number) => {
+  const openPdfPage = (page: number, documentId?: string) => {
     const list = materials.data ?? [];
-    const material = list.find((m) => m.kind === 'slides') ?? list[0];
+    const index = documentId?.match(/^document_(\d+)$/)?.[1];
+    const material = index !== undefined ? list[Number(index)] : list.find((m) => m.kind === 'slides') ?? list[0];
     if (material) setPdf({ material, page });
   };
 
@@ -136,13 +140,15 @@ function LectureView({ lecture }: { lecture: Lecture }) {
           </div>
         </header>
 
+        <SourceTools lectureId={lecture.id} original={local.transcript || local.video ? undefined : remoteTranscript} onTranslated={setTranslated} />
+
         {/* Video + transcript */}
         <div className="flex min-h-0 flex-1 flex-col gap-4 p-4 sm:px-6">
           {(local.video || local.transcript || local.error) && (
             <div className={cn('mx-auto flex w-full max-w-5xl shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-[12.5px]', local.error ? 'bg-red-50 text-red-700' : 'bg-brand-50 text-brand-700')}>
               {local.error ? <AlertCircle className="size-4 shrink-0" /> : <FileUp className="size-4 shrink-0" />}
               <span className="min-w-0 flex-1 truncate">
-                {local.error ?? `Using local files (not uploaded anywhere): ${[local.video?.name, local.transcriptName].filter(Boolean).join(' · ')}`}
+                {local.error ?? `Local preview only — use Upload sources for AI to enable chat/translation: ${[local.video?.name, local.transcriptName].filter(Boolean).join(' · ')}`}
               </span>
               <button onClick={local.error ? local.dismiss : local.reset} className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-medium hover:bg-white/60"><X className="size-3.5" />{local.error ? 'Dismiss' : 'Reset'}</button>
             </div>
@@ -152,7 +158,7 @@ function LectureView({ lecture }: { lecture: Lecture }) {
             {selection && <SelectionBar selection={selection} onPlay={playSelection} onAsk={() => askAbout(selection)} onClear={() => setSelection(null)} />}
             <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-slate-500">
               <span className="inline-flex items-center gap-1.5"><CalendarDays className="size-3.5" />{formatDate(lecture.recordedAt, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
-              <span className="inline-flex items-center gap-1.5"><Clock className="size-3.5" />{formatDuration(lecture.durationSec)}</span>
+              <span className="inline-flex items-center gap-1.5"><Clock className="size-3.5" />{formatDuration(originalTranscript?.segments.at(-1)?.end ?? lecture.durationSec)}</span>
               <span className="inline-flex items-center gap-1.5"><MapPin className="size-3.5" />Room {lecture.room}</span>
               <span className="ml-auto"><StatusBadge job={job} /></span>
             </div>
@@ -164,7 +170,7 @@ function LectureView({ lecture }: { lecture: Lecture }) {
       </div>
 
       {/* Chat: side panel on desktop, sheet on mobile — never covers the video or transcript on large screens */}
-      {chatOpen && (
+      {chatOpen && !local.transcript && !local.video && (
         <>
           <div className="fixed inset-0 z-30 bg-slate-900/30 lg:hidden" onClick={() => setChatOpen(false)} />
           <aside className="fixed inset-x-0 bottom-0 z-40 h-[78dvh] overflow-hidden rounded-t-2xl border-t border-slate-200 shadow-2xl lg:static lg:z-auto lg:h-auto lg:w-[360px] lg:shrink-0 lg:rounded-none lg:border-l lg:border-t-0 lg:shadow-none xl:w-[380px]">

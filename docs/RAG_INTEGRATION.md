@@ -6,10 +6,14 @@ part of this change. The teammate may add their implementation independently.
 
 ## Current UI/server compatibility
 
-The teammate's separately committed `polimi-lectures/` app currently calls its
-chat server on port 8787. Its `LectureMindService.ask` still invokes the
-full-context prompt path. Adding this package does **not** automatically switch
-that UI to RAG. This change does not edit any files under `polimi-lectures/`.
+The UI now calls the unified API in `lecture_rag.unified_api` on port 8787.
+Its persistent chat routes use RAG, with independent English/Italian answer and
+transcript-language controls. [APP_INTEGRATION.md](APP_INTEGRATION.md) describes
+startup, the complete manual test and remaining demo-only features.
+
+The older standalone `LectureMindService.ask` remains available for its CLI;
+`npm run chatbot` now starts the integrated server instead. The adapter example
+below documents the underlying interfaces for alternate integrations.
 
 The existing chat server can keep its chat storage, routes and chapter generation.
 Replace only its answer-generation step when integrating. Use one `RagService`

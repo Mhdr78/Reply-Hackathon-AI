@@ -19,8 +19,12 @@ export function useTranscription(lectureId: string, { autoStart = true } = {}) {
     setTranscript(undefined);
     setError(undefined);
 
-    const load = () =>
-      svc.getTranscript(lectureId).then((t) => alive && setTranscript(t), (e) => alive && setError(toAppError(e)));
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      return svc.getTranscript(lectureId).then((t) => alive && setTranscript(t), (e) => { loaded = false; if (alive) setError(toAppError(e)); });
+    };
 
     const unsubscribe = svc.subscribe(lectureId, (j) => {
       if (!alive) return;

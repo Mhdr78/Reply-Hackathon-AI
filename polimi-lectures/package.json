@@ -5,13 +5,13 @@
   "scripts": {
     "setup": "npm install --prefix apps/web",
     "dev": "npm run chatbot & npm run web",
-    "dev:fake": "npm run chatbot:fake & npm run web",
+    "dev:fake": "VITE_CHATBOT_URL= npm run web",
     "web": "npm run dev --prefix apps/web",
-    "chatbot": "cd services/chatbot && python3 -m lecturemind.server",
-    "chatbot:fake": "cd services/chatbot && python3 -m lecturemind.server --fake-llm",
+    "chatbot": "../.venv/bin/python ../run.py",
+    "chatbot:fake": "cd services/chatbot && ../../../.venv/bin/python -m lecturemind.server --fake-llm",
     "test": "npm run test:web && npm run test:chatbot",
     "test:web": "npm test --prefix apps/web",
-    "test:chatbot": "cd services/chatbot && python3 -m unittest discover -s tests -t .",
+    "test:chatbot": "cd services/chatbot && ../../../.venv/bin/python -m unittest discover -s tests -t .",
     "typecheck": "npm run typecheck --prefix apps/web",
     "build": "npm run build --prefix apps/web"
   }

@@ -6,6 +6,7 @@ import { chatbotChapterService, httpChapterService, mockChapterService } from '.
 import { httpChatService, mockChatService } from './chat/ChatService';
 import { httpCourseService, mockCourseService } from './courses/CourseService';
 import { httpMaterialService, mockMaterialService } from './materials/MaterialService';
+import { integratedTranscriptionService } from './transcription/integratedTranscriptionService';
 import { httpTranscriptionService } from './transcription/httpTranscriptionService';
 import { mockTranscriptionService } from './transcription/mockTranscriptionService';
 
@@ -21,6 +22,6 @@ const baseServices = config.useMocks
 const chat = config.chatbotUrl ? httpChatService : mockChatService;
 const chapters = config.chatbotUrl ? chatbotChapterService : baseServices.chapters;
 
-export const services = { ...baseServices, chat, chapters };
+export const services = { ...baseServices, chat, chapters, transcription: config.chatbotUrl ? integratedTranscriptionService : baseServices.transcription };
 
 export type Services = typeof services;
