@@ -22,6 +22,7 @@ Reply-Hackathon-AI/
 │   ├── __main__.py          # python -m entry point
 │   ├── core.py              # Language detection and transcription
 │   └── cli.py               # CLI arguments and output files
+├── src/lecture_translation/ # Full-context OpenRouter translation and source-time mapping
 ├── tests/
 │   ├── test_language_detection.py
 │   └── test_cli.py
@@ -33,6 +34,7 @@ Reply-Hackathon-AI/
 ├── data/                    # Local recordings; ignored except .gitkeep
 ├── outputs/                 # Generated files; ignored except .gitkeep
 ├── transcribe.py            # Keeps the original command/import working
+├── translate.py             # Translate an existing transcript without rerunning Whisper
 ├── pyproject.toml           # Package metadata, dependency pin, console command
 ├── requirements.txt         # Installs this package in editable mode
 └── .gitignore
@@ -104,6 +106,56 @@ model; a future batch service should manage model reuse and worker lifecycle.
 The previous `from transcribe import transcribe_lecture` import still works when
 running from the checkout.
 
+## Translate the full transcript
+
+The translation module reads all original segment texts together in one request,
+translates the complete lecture, and returns coherent units with original source
+IDs. Adjacent source fragments can be merged for natural phrasing. Timestamps
+are copied from their source intervals; translated word timestamps are not
+invented. The original transcript stays available as a separate language track.
+
+The budget-oriented default is `openai/gpt-6-luna` through OpenRouter. Configure
+`OPENROUTER_API_KEY` in the repository-root `.env` file; it is read automatically.
+The local file takes precedence over an environment variable; a blank/missing
+file value falls back to the environment. No additional SDK or Whisper model is
+needed by the translator.
+
+If setting up a fresh checkout, install dependencies and copy the template once:
+
+```bash
+python -m pip install -r requirements.txt
+cp .env.example .env
+```
+
+Fill in the local file:
+
+```dotenv
+OPENROUTER_API_KEY=your_openrouter_key_here
+```
+
+`.env` is ignored by Git; `.env.example` is the shareable empty template.
+
+Prepare the entire request without spending API credits:
+
+```bash
+python translate.py outputs/lecture_001/transcript.json --target-language it --prepare-only
+```
+
+After filling in `.env`, execute translation:
+
+```bash
+python translate.py outputs/lecture_001/transcript.json --target-language it
+```
+
+The JSON and text are saved under `outputs/lecture_001/translations/it/`.
+Matching saved translations are reused without another call. Providers must
+support the JSON schema and the configured price ceilings. A conservative
+per-request estimated-cost guard defaults to $0.10. For the team's total $10
+budget, also apply the key/account spending limit in OpenRouter; the local
+estimate is not an account-wide spending ledger.
+
+[Full translation contract and UI integration](docs/TRANSLATION.md)
+
 ## Team documentation and checks
 
 - [Exact processing and JSON contract](docs/TRANSCRIPTION_HANDOFF.md)
@@ -120,5 +172,6 @@ python -m unittest discover -s tests -v
 The detector tests use simulated probabilities. English audio has also been
 processed with word timestamps; real Italian lecture accuracy remains to be
 evaluated. Whisper segments are transcription units, not final lesson topics.
-The tutoring LLM, multilingual embeddings, translation cache, slide processing,
-and user interface are downstream work, not implemented in this package.
+The tutoring LLM, multilingual embeddings, slide processing, and user interface
+are downstream work. The separate transcript translation CLI is implemented;
+live model translation quality still requires an API-backed evaluation.

@@ -1,5 +1,9 @@
 # Transcription module: implementation and integration handoff
 
+For full-lecture translated transcript tracks, see the separate
+[OpenRouter translation contract](TRANSLATION.md). Original Whisper word
+timestamps remain source-language data and must not be copied onto target words.
+
 This document describes the current implementation in `src/lecture_transcription/core.py`
 (transcription), `src/lecture_transcription/cli.py` (CLI), and the
 contract downstream agents should use. It is written in English for the team

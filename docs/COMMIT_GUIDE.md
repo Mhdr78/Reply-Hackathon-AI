@@ -41,7 +41,7 @@ The commands below are for the repository owner to execute. This preparation
 does not itself create a commit or push anything to GitHub.
 
 ```bash
-git add .gitignore README.md pyproject.toml requirements.txt transcribe.py src/ tests/ docs/ data/.gitkeep outputs/.gitkeep
+git add .gitignore .env.example README.md pyproject.toml requirements.txt transcribe.py translate.py src/ tests/ docs/ data/.gitkeep outputs/.gitkeep
 git diff --cached --stat
 git diff --cached --check
 ```

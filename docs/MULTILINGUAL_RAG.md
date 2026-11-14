@@ -1,5 +1,10 @@
 # English/Italian teaching and token-efficiency decision
 
+The separate requirement to display a full translated transcript is now handled
+by the OpenRouter translation module described in [TRANSLATION.md](TRANSLATION.md).
+The recommendation below concerns tutor answers. A complete translated asset
+and an answer generated directly in a chosen language serve different purposes.
+
 ## Decision
 
 Keep original-language transcripts, slide text, and visual assets as canonical
@@ -8,8 +13,9 @@ ask the tutoring LLM to generate its explanation **directly in the user's chosen
 response language**, English or Italian, in the same answer call.
 
 This is an architecture recommendation for the downstream team. The present
-transcription package does not implement an LLM, an embeddings index, a user
-language setting, a translator, or a translation cache.
+transcription package does not implement a tutoring LLM, an embeddings index, or
+a user interface. The separate translation module creates and reuses full
+translated transcript artifacts; see its own contract.
 
 For the prototype, do not translate an entire lecture or slide deck merely to
 change the language of an explanation. A bilingual teacher can read English
