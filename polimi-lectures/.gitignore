@@ -1,0 +1,27 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets: never commit real keys (use the .env.example files)
+.env
+.env.local
+.env.*.local
+
+# Web app
+node_modules/
+apps/web/dist/
+
+# Lecture media is course material and large: keep it local (see apps/web/public/media/README.md)
+apps/web/public/media/*
+!apps/web/public/media/README.md
+!apps/web/public/media/.gitkeep
+
+# Chatbot
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+services/chatbot/data/
+*.sqlite3
+*.sqlite3-journal

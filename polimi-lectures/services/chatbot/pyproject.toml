@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lecturemind"
+version = "1.0.0"
+description = "Answers students' questions about a lecture using its transcript and slides (OpenRouter)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []  # standard library only; Poppler's `pdftotext` must be on PATH
+
+[project.scripts]
+lecturemind = "lecturemind.cli:main"
+lecturemind-server = "lecturemind.server.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["lecturemind*"]
