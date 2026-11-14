@@ -1,0 +1,121 @@
+{
+  "provenance": "Recorded five-case live RAG smoke test, 14 November 2026; underlying real lecture assets are not included. Source identifiers are local to each recorded answer.",
+  "cases": [
+    {
+      "case_id": "matrix-bias-en",
+      "status": "answered",
+      "response_language": "en",
+      "answer": "The extra column represents the bias term. The first layer takes I input values, and the weight matrix includes one additional input for the bias, making I+1 columns. Equivalently, the weighted sum uses the I ordinary inputs plus a bias contribution; the lecturer describes this as a fictitious neuron used to compute the layer’s bias. [S1] [S2] [S3]",
+      "source_recall_at_k": 1.0,
+      "answerability_correct": true,
+      "seconds": 4.82,
+      "sources": [
+        {
+          "citation_id": "S1",
+          "source_type": "transcript",
+          "start_s": 359.1,
+          "end_s": 606.44
+        },
+        {
+          "citation_id": "S2",
+          "source_type": "transcript",
+          "start_s": 0.8599999999999997,
+          "end_s": 215.38
+        },
+        {
+          "citation_id": "S3",
+          "source_type": "transcript",
+          "start_s": 331.62,
+          "end_s": 366.56
+        }
+      ]
+    },
+    {
+      "case_id": "matrix-bias-it",
+      "status": "answered",
+      "response_language": "it",
+      "answer": "La matrice ha I+1 colonne perché, oltre agli I ingressi effettivi, si include un ingresso aggiuntivo costante pari a 1, associato al peso del bias. Così il bias può essere incorporato nella stessa somma pesata degli ingressi; per ciascun neurone del livello successivo si considerano quindi I+1 valori in ingresso. Se ci sono J neuroni in quel livello, la matrice ha J righe e I+1 colonne. [S2] [S4] [S5]",
+      "source_recall_at_k": 1.0,
+      "answerability_correct": true,
+      "seconds": 4.46,
+      "sources": [
+        {
+          "citation_id": "S2",
+          "source_type": "transcript",
+          "start_s": 359.1,
+          "end_s": 606.44
+        },
+        {
+          "citation_id": "S4",
+          "source_type": "pdf",
+          "page_number": 8
+        },
+        {
+          "citation_id": "S5",
+          "source_type": "pdf",
+          "page_number": 7
+        }
+      ]
+    },
+    {
+      "case_id": "activation-slides-en",
+      "status": "answered",
+      "response_language": "en",
+      "answer": "The slides list three activation functions and their derivatives: **Linear**: \\(g(a)=a\\), \\(g'(a)=1\\); **Sigmoid**: \\(g(a)=\\frac{1}{1+\\exp(-a)}\\), \\(g'(a)=g(a)(1-g(a))\\); and **Tanh**: \\(g(a)=\\frac{\\exp(a)-\\exp(-a)}{\\exp(a)+\\exp(-a)}\\), \\(g'(a)=1-g(a)^2\\). [S1]",
+      "source_recall_at_k": 1.0,
+      "answerability_correct": true,
+      "seconds": 4.3,
+      "sources": [
+        {
+          "citation_id": "S1",
+          "source_type": "pdf",
+          "page_number": 18
+        }
+      ]
+    },
+    {
+      "case_id": "network-layers-it",
+      "status": "answered",
+      "response_language": "it",
+      "answer": "Una rete neurale feedforward è organizzata in un livello di ingresso, uno o più livelli nascosti e un livello di uscita. Il livello di ingresso riceve i dati; il numero di unità in ingresso e in uscita è determinato dalle dimensioni del problema, mentre il numero di livelli nascosti e di neuroni in ciascuno è una scelta progettuale. [S1] [S2] [S3]\n\nNel modello descritto, i livelli consecutivi sono collegati tramite pesi. Si assume che ogni neurone di un livello sia connesso a tutti i neuroni del livello successivo (connessione densa o fully connected); l’uscita di ciascun livello dipende soltanto dal livello precedente, senza salti o connessioni di ritorno. Per questo il segnale procede in una sola direzione, dall’ingresso all’uscita. In forma compatta, l’uscita al livello l è indicata come h⁽ˡ⁾ = hⱼ⁽ˡ⁾(h⁽ˡ⁻¹⁾, W⁽ˡ⁾), dove W⁽ˡ⁾ contiene i pesi che collegano i due livelli. [S1] [S3] [S4]",
+      "source_recall_at_k": 1.0,
+      "answerability_correct": true,
+      "seconds": 5.51,
+      "sources": [
+        {
+          "citation_id": "S1",
+          "source_type": "pdf",
+          "page_number": 17
+        },
+        {
+          "citation_id": "S2",
+          "source_type": "transcript",
+          "start_s": 0.8599999999999997,
+          "end_s": 215.38
+        },
+        {
+          "citation_id": "S3",
+          "source_type": "transcript",
+          "start_s": 186.14,
+          "end_s": 407.52
+        },
+        {
+          "citation_id": "S4",
+          "source_type": "transcript",
+          "start_s": 574.94,
+          "end_s": 785.82
+        }
+      ]
+    },
+    {
+      "case_id": "outside-material",
+      "status": "insufficient_evidence",
+      "response_language": "en",
+      "answer": "The indexed lecture and documents do not provide enough evidence to answer this question.",
+      "source_recall_at_k": null,
+      "answerability_correct": true,
+      "seconds": 1.16,
+      "sources": []
+    }
+  ]
+}

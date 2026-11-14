@@ -1,5 +1,13 @@
 # Reply-Hackathon-AI
 
+## Hackathon delivery
+
+The prepared `ml-01` demo video, slides, original/Italian transcripts and chapters
+are included in Git, so a fresh clone matches the with-data delivery after setup.
+
+Start with [the delivery guide](delivery/README.md) for reviewer setup, architecture,
+recorded interactions, evidence, demo steps and known limits. Pitch slides are separate.
+
 ## Question-driven RAG
 
 The separate `lecture_rag` module indexes original transcript JSON and PDF page

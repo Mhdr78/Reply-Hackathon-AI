@@ -1,5 +1,9 @@
 # Polimi Lectures
 
+> **Integrated app delivery:** follow [the delivery guide](../delivery/README.md).
+> The default app now uses root `run.py`; older standalone service commands below
+> describe the legacy package and are not the recommended integrated startup.
+
 Watch Politecnico di Milano lecture recordings with a synchronized transcript, AI-generated chapters, the lecture's
 PDFs, and an AI assistant you can ask about the whole lecture or a selected part of it.
 

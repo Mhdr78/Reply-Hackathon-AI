@@ -24,3 +24,29 @@ dist/
 # Local RAG catalog, vector database and development caches.
 /.local/
 /qdrant_storage/
+
+# Explicit public demo assets: reproduce the delivered ml-01 lecture after clone.
+# All other runtime state, chats, keys, vectors and model caches remain ignored.
+!/.local/
+/.local/*
+!/.local/web/
+/.local/web/*
+!/.local/web/media/
+/.local/web/media/*
+!/.local/web/media/ml-01.mp4
+!/.local/web/media/ml-01.json
+!/.local/web/media/ml-01/
+/.local/web/media/ml-01/*
+!/.local/web/media/ml-01/slides.pdf
+!/.local/web/media/ml-01/materials.json
+!/.local/web/prepared/
+/.local/web/prepared/*
+!/.local/web/prepared/ml-01.sqlite3
+!/.local/web/prepared/ml-01.source.json
+!/.local/web/translations/
+/.local/web/translations/*
+!/.local/web/translations/ml-01/
+/.local/web/translations/ml-01/*
+!/.local/web/translations/ml-01/it/
+/.local/web/translations/ml-01/it/*
+!/.local/web/translations/ml-01/it/570ed8192d22cd2a7a202d75420770c621bf4e46dae6647a7b31bac72b326d40.json

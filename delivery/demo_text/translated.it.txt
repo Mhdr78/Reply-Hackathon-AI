@@ -1,0 +1,59 @@
+E la soluzione fu proposta da… non ho controllato, credo fosse Romula, ma non sono del tutto sicuro del nome, mi dispiace.
+
+Fu trovata cambiando un po’ il nome. Quindi, in sostanza, il modo per addestrare il perceptron multistrato consisteva nel trasformare il perceptron in qualcos’altro.
+
+Per questo, le architetture che usiamo oggi non si chiamano perceptron multistrato, o non dovrebbero chiamarsi perceptron multistrato: dovrebbero chiamarsi «54 uno e soltanto».
+
+Nel gergo, a volte chiamiamo queste reti MLP, perceptron multistrato, ma formalmente i neuroni che le compongono non sono perceptron.
+
+E si vede subito dall’immagine perché non sono perceptron: il perceptron, se ricordate, ha un meccanismo di soglia, implementato da una funzione gradino di Heaviside o da una funzione segno.
+
+In questo caso non abbiamo né la funzione di Heaviside né la funzione gradino. E più avanti, oggi, vi dirò cosa mettere in questa nota e perché.
+
+Nonostante questo, questo tipo di architettura è organizzato in livelli. Abbiamo un livello di input, che è essenzialmente il punto in cui arriva l’input del modello. Il livello di input, in sostanza, fa da spugna per l’input destinato al livello successivo.
+
+Ha un certo numero di neuroni, o di input, definito dalla dimensione del problema. Quindi, se il problema ha I input 12, il livello di input ha I neuroni. Ancora una volta, non calcolano alcuna funzione: si limitano a instradare l’input agli altri.
+
+Notate che in realtà il numero di neuroni nel livello di input e in qualunque altro livello è, in questo caso, I più 1, perché c’è sempre il bias. Si tratta quindi di questo neurone fittizio, che viene usato per calcolare il bias del livello.
+
+Un altro livello particolare è il livello di output. Anche in questo caso, la dimensione del livello di output è definita dal problema. Se il problema ha I input e K output, il numero di input nel livello di input è I, mentre il numero di output, o di neuroni, nel livello di output è K. Sono quindi definiti dal problema.
+
+Nella maggior parte delle mie immagini vedrete un solo output, per comodità. Ma esistono molte, molte reti con output multipli. Già nella prossima diapositiva vi mostrerò un esempio di rete con K output. È più comune di quanto abbiate visto.
+
+Nella lezione scorsa abbiamo già visto un esempio con supervisione, la rete per le immagini. In quel caso bisogna predire le mille classi, quindi si hanno mille output. Ma tornerò su questo più avanti.
+
+Poi, al centro, ci sono un certo numero di livelli nascosti. Il numero di livelli nascosti e il numero di neuroni per livello nascosto sono scelte progettuali. Voglio dire, dipende da voi; beh, dipende dal trovare un numero ragionevole di livelli e un numero ragionevole di neuroni.
+
+Purtroppo non ci sono regole magiche per stabilire l’output di neuroni: per esempio, un numero pari al numero di dati o alla radice quadrata del numero di dati. Ci sono stati alcuni tentativi di proporre regole di questo tipo, ma non funzionano davvero. Bisogna quindi procedere per tentativi ed errori per scoprirlo, nel modo giusto. Anche questo farà parte della vostra sfida: trovare il numero giusto di neuroni e di livelli.
+
+Mettendo tutto insieme, ci si rende conto che l’output di una rete è una funzione complessa. È una funzione non lineare che dipende da molti fattori: la funzione che si inserisce nel neurone, il numero di livelli, il numero di neuroni, i pesi e i virus. Quindi ci sono molti parametri da impostare. Vi darò qualche indicazione su come impostarne alcuni; per gli altri dovrete procedere per tentativi ed errori.
+
+Facciamo alcune ipotesi. La prima è che, per il momento, abbiamo un livello completamente connesso. Questo significa che ogni neurone di un livello è connesso a ogni neurone dell’intero. Tra due livelli c’è una matrice di pesi con J righe e I più 1 colonne, perché la somma pesata degli input per il neurone J è una combinazione lineare degli input. Il numero di input è I più 1; il numero di output è J.
+
+Quindi, per il primo livello, si hanno I più 1 per J pesi, J uno, che è… Ora è coperto dalla nuvola, ma con la seconda incognita. J uno è il numero di neuroni nel livello nascosto. Poi, nel secondo livello, si ha J uno più 1, il bias, per J due, più J due più 1 per J tre, più J tre più 1 per K.
+
+Per esempio, questo è il numero di… Questo è il numero di neuroni in questo… Scusate, il numero di pesi in questa rete. È molto importante perché indica quanti parametri ha questa rete.
+
+E si vede che, in generale, il numero di neuroni cresce, almeno per ciascun livello, quadraticamente con il numero di neuroni. Voglio dire, se avete due livelli nascosti, allora i neuroni sono nell’ordine di 100 parametri. Se l’ordine è 100, va bene? Se avete due livelli nascosti da 100 neuroni, avete nell’ordine di 1000 parametri. Se avete due livelli nascosti nell’ordine di 1000 neuroni, avete nell’ordine di un milione di parametri. Perché «nell’ordine di»? Perché non sto contando il bias.
+
+Quindi, con pochi livelli e qualche centinaio di neuroni, è molto facile arrivare a un milione o a milioni di parametri. Queste matrici sono molto pesanti e molto dense, nel senso che di solito non hanno molti zeri. In effetti, questo tipo di livelli è noto anche come livelli densi. Si chiamano livelli lineari. Scusate, sì, livelli lineari: non mi piace, ma si può dire livello lineare o livello denso.
+
+Oppure livello percettivo multistrato, che non mi piace neanche, perché questi non sono perceptron. Insomma, si possono chiamare completamente connessi o densi. Sono due nomi che colgono il punto. Questa è una delle ipotesi che facciamo: tutti i nostri livelli sono densi in questo tipo di rete. Più avanti vedrete che, per esempio, questo non vale per le reti neurali convoluzionali.
+
+Le reti neurali convoluzionali sono totalmente diverse. Il numero di pesi è molto più… è inferiore, e più avanti imparerete a contare e a progettare una rete neurale convoluzionale.
+
+Un’altra ipotesi che facciamo oggi è che ciascun livello calcoli usando solo il livello precedente. Che cosa significa? Significa che l’output di questo livello dipende solo da questo e non dipende da quello precedente. Quindi il segnale non ha una freccia che salta un livello e arriva in questo modo. È obbligatorio, si sa, è tutto? Per il momento è semplicemente un’ipotesi.
+
+Più avanti vedrete che queste connessioni corte, o connessioni skip, sono molto comuni, soprattutto nelle architetture avanzate. Per esempio, RESTnet, che è un’architettura specifica, si basa sulle connessioni skip. UNET, una rete per la segmentazione, usa queste connessioni skip. Ci sono diverse ragioni per cui si usano. Per il momento, teniamole, per così dire, fuori dal nostro modello. Le introdurremo più avanti, insieme alle connessioni skip.
+
+Ma per ora… Va bene: completamente connessi, senza connessioni skip. La caratteristica principale di queste reti è che il segnale, come vedete, viaggia in una sola direzione. Niente… diciamo, nessun nodo ricorrente, nessun feedback, nessuna connessione laterale. Procede semplicemente in avanti. Ecco perché si chiamano «flip forward». Il nome deriva da questa proprietà.
+
+Questa proprietà semplifica molte cose, soprattutto la backpropagation, che è l’algoritmo usato per addestrare questo tipo di punti. E ovviamente c’è una cosa che non ho detto: la funzione di attivazione. Qual era il problema con il percento? Sarà più chiaro in seguito, ma per addestrare queste reti bisogna calcolare la derivata di questi neuroni. Quindi la funzione di attivazione deve essere differenziabile.
+
+Se pensate alla funzione gradino e alla funzione seno, hanno derivate pessime. Voglio dire, la derivata è sempre zero, tranne nella regione in cui non esiste. Insomma, una derivata pessima. Non usatela: questo è il messaggio. E il perché diventerà chiaro più avanti.
+
+Quindi… per il momento, reti multistrato densamente connesse, senza connessioni skip. Tutto quello che dirò continua a valere se aggiungete connessioni skip, se la matrice è piena di zeri. Piena. Ha molti zeri. In realtà, le cose funzionano persino meglio. Se è piena di zeri, il calcolo è più veloce, perché si può usare l’algebra lineare sparsa. E con le connessioni skip l’addestramento è più veloce, ma il motivo sarà chiaro tra due o tre settimane.
+
+Sì. La funzione di attivazione è l’interazione delle cose come i raggi. Ci sono alcune funzioni che non sono differenziabili, tranne in un punto, come quella menzionata dal vostro collega, che oggi non nominerò ma introdurrò più avanti. Non sono però differenziabili in un punto. Quindi, un punto sulla retta reale ha delle proprietà. Il vero problema della funzione seno e della funzione gradino è che la derivata è sempre zero. Quindi non sono funzioni valide per la discesa del gradiente, né per la backpropagation.
+
+Ma restiamo sulle funzioni di attivazione. Quali sono le funzioni di attivazione più comuni usate nelle reti neurali feedforward? Procediamo un passo alla volta. Cominciamo da quelle introdotte nel secolo scorso, e poi discuteremo quelle introdotte nel secolo successivo, quando sarà il momento. A essere del tutto onesti, ReLU è stata introdotta nel secolo scorso, ma nessuno se n’è accorto. Ci si è resi conto che era utile in questo secolo. Quindi parlerò di ReLU più avanti.

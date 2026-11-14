@@ -36,8 +36,9 @@ not real university credentials.
 
 1. The current machine has the existing sample video, original transcript,
    slide PDF and previously validated Italian translation prepared under
-   `.local/web/`. They are ignored by Git. In another checkout, use **Upload
-   sources for AI** to provide an MP4, original JSON transcript and/or PDFs.
+   `.local/web/`. These exact demo files are included in Git through a narrow allowlist, so
+   a fresh clone has the same prepared lesson. Use **Upload sources for AI**
+   to provide different recordings, transcripts or PDFs.
 2. Confirm video playback and original transcript. Without a transcript, an
    uploaded MP4 is transcribed by local Whisper in a background thread. Status
    is polled; failures and retry appear in the existing status panel.

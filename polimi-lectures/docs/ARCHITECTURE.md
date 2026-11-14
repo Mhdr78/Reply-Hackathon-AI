@@ -1,5 +1,9 @@
 # Architecture
 
+> **Legacy standalone architecture.** The current integrated app architecture is
+> documented in [delivery/ARCHITECTURE.md](../../delivery/ARCHITECTURE.md).
+> The description below is retained for the older standalone chatbot.
+
 ```
 Browser ─► apps/web (React, Vite dev server :5173)
              │  /media/*          static lecture files (video, transcript, materials.json, PDFs)

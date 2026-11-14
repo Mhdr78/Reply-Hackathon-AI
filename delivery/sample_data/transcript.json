@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "lecture_id": "delivery_sample",
+  "source_video": "no-recording-provided.mp4",
+  "engine": "manual-demo-fixture",
+  "language": "en",
+  "timestamp_unit": "seconds",
+  "text": "A dense neural-network layer connects each input to each output neuron. If there are I input features and J output neurons, its weight matrix has J rows. A bias can be represented by an additional constant input equal to one. Including this constant gives I plus one columns and J times I plus one weights. A feedforward network passes information from its input through hidden layers toward the output.",
+  "segments": [
+    {
+      "segment_id": "delivery_sample_00000",
+      "start": 0.0,
+      "end": 12.0,
+      "text": "A dense neural-network layer connects each input to each output neuron. If there are I input features and J output neurons, its weight matrix has J rows.",
+      "words": []
+    },
+    {
+      "segment_id": "delivery_sample_00001",
+      "start": 12.0,
+      "end": 25.0,
+      "text": "A bias can be represented by an additional constant input equal to one. Including this constant gives I plus one columns and J times I plus one weights.",
+      "words": []
+    },
+    {
+      "segment_id": "delivery_sample_00002",
+      "start": 25.0,
+      "end": 38.0,
+      "text": "A feedforward network passes information from its input through hidden layers toward the output.",
+      "words": []
+    }
+  ]
+}
